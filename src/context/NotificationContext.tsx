@@ -26,6 +26,13 @@ export interface NotificationPreferences {
   remind_before_end: boolean;
 }
 
+export interface ToastNotification {
+  id: string;
+  title: string;
+  message: string;
+  type?: string;
+}
+
 interface NotificationContextType {
   notifications: NotificationItem[];
   unreadCount: number;
@@ -34,6 +41,9 @@ interface NotificationContextType {
   isDrawerOpen: boolean;
   isSettingsOpen: boolean;
   isLoading: boolean;
+  activeToast: ToastNotification | null;
+  dismissToast: () => void;
+  showInAppToast: (item: { id?: string; title: string; message: string; type?: string }) => void;
   toggleDrawer: (open?: boolean) => void;
   toggleSettings: (open?: boolean) => void;
   fetchNotifications: () => Promise<void>;
@@ -50,7 +60,7 @@ interface NotificationContextType {
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
-  const { token, isAuthenticated } = useAuth();
+  const { user, token, isAuthenticated } = useAuth();
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [preferences, setPreferences] = useState<NotificationPreferences | null>(null);
@@ -58,9 +68,26 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [activeToast, setActiveToast] = useState<ToastNotification | null>(null);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
   const checkDueIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const dismissToast = useCallback(() => {
+    setActiveToast(null);
+  }, []);
+
+  const showInAppToast = useCallback(
+    (item: { id?: string; title: string; message: string; type?: string }) => {
+      setActiveToast({
+        id: item.id || String(Date.now()),
+        title: item.title,
+        message: item.message,
+        type: item.type,
+      });
+    },
+    []
+  );
 
   // Play synthesized chime using Web Audio API
   const playChime = useCallback(() => {
@@ -69,13 +96,16 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
       if (!AudioCtx) return;
       const ctx = new AudioCtx();
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
 
       // Note 1: E5 (659.25 Hz)
       const osc1 = ctx.createOscillator();
       const gain1 = ctx.createGain();
       osc1.type = 'sine';
       osc1.frequency.setValueAtTime(659.25, ctx.currentTime);
-      gain1.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain1.gain.setValueAtTime(0.15, ctx.currentTime);
       gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
       osc1.connect(gain1);
       gain1.connect(ctx.destination);
@@ -87,7 +117,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       const gain2 = ctx.createGain();
       osc2.type = 'sine';
       osc2.frequency.setValueAtTime(987.77, ctx.currentTime + 0.12);
-      gain2.gain.setValueAtTime(0.15, ctx.currentTime + 0.12);
+      gain2.gain.setValueAtTime(0.18, ctx.currentTime + 0.12);
       gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
       osc2.connect(gain2);
       gain2.connect(ctx.destination);
@@ -98,44 +128,169 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     }
   }, []);
 
-  // Check initial browser permission
+  // Check initial permission (Web + Native Capacitor)
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'Notification' in window) {
-      setBrowserPermission(Notification.permission);
+    if (typeof window !== 'undefined') {
+      if ('Notification' in window) {
+        setBrowserPermission(Notification.permission);
+      }
+      import('@capacitor/core')
+        .then(({ Capacitor }) => {
+          if (Capacitor.isNativePlatform()) {
+            import('@capacitor/local-notifications')
+              .then(({ LocalNotifications }) => {
+                LocalNotifications.checkPermissions()
+                  .then((status) => {
+                    if (status.display === 'granted') {
+                      setBrowserPermission('granted');
+                    }
+                  })
+                  .catch(() => {});
+              })
+              .catch(() => {});
+          }
+        })
+        .catch(() => {});
     }
   }, []);
 
-  // Request browser permission
+  // Request browser & mobile permission
   const requestBrowserPermission = async (): Promise<NotificationPermission> => {
-    if (typeof window === 'undefined' || !('Notification' in window)) {
-      return 'denied';
-    }
+    if (typeof window === 'undefined') return 'denied';
+
+    // 1. Capacitor Native Platform (Android / iOS)
     try {
-      const permission = await Notification.requestPermission();
-      setBrowserPermission(permission);
-      return permission;
-    } catch (err) {
-      console.error('Error requesting notification permission:', err);
-      return 'denied';
+      const { Capacitor } = await import('@capacitor/core');
+      if (Capacitor.isNativePlatform()) {
+        const { LocalNotifications } = await import('@capacitor/local-notifications');
+        const res = await LocalNotifications.requestPermissions();
+        try {
+          await LocalNotifications.createChannel({
+            id: 'dailo-reminders',
+            name: 'Pengingat Dailo',
+            description: 'Notifikasi pengingat jadwal dan deadline tugas',
+            importance: 5,
+            visibility: 1,
+            vibration: true,
+          });
+        } catch (_) {}
+        const perm: NotificationPermission = res.display === 'granted' ? 'granted' : 'denied';
+        setBrowserPermission(perm);
+        return perm;
+      }
+    } catch (e) {
+      console.warn('Capacitor permission request fallback:', e);
     }
+
+    // 2. Web Browser
+    if ('Notification' in window) {
+      try {
+        const permission = await Notification.requestPermission();
+        setBrowserPermission(permission);
+        return permission;
+      } catch (err) {
+        console.error('Error requesting notification permission:', err);
+        return 'denied';
+      }
+    }
+
+    return 'denied';
   };
 
-  // Trigger native browser notification
-  const triggerBrowserNotification = useCallback(
-    (title: string, body: string) => {
-      if (typeof window === 'undefined' || !('Notification' in window)) return;
-      if (Notification.permission === 'granted' && (preferences?.browser_enabled ?? true)) {
-        try {
-          new Notification(title, {
-            body,
-            icon: '/favicon.ico',
-          });
-        } catch (e) {
-          console.warn('Browser notification error:', e);
+  // Trigger universal notification (In-App Toast + Audio + Mobile Native + Web Push)
+  const triggerNotification = useCallback(
+    async (title: string, body: string, id?: string) => {
+      // 1. ALWAYS trigger In-App Toast (visual feedback for user in web & mobile view)
+      setActiveToast({
+        id: id || String(Date.now()),
+        title,
+        message: body,
+      });
+
+      // 2. Play Audio Chime
+      if (preferences?.sound_enabled ?? true) {
+        playChime();
+      }
+
+      // 3. Native Android / Capacitor Status Bar Notification
+      try {
+        if (typeof window !== 'undefined') {
+          const { Capacitor } = await import('@capacitor/core');
+          if (Capacitor.isNativePlatform()) {
+            const { LocalNotifications } = await import('@capacitor/local-notifications');
+            const perm = await LocalNotifications.checkPermissions();
+            if (perm.display !== 'granted') {
+              await LocalNotifications.requestPermissions();
+            }
+            try {
+              await LocalNotifications.createChannel({
+                id: 'dailo-reminders',
+                name: 'Pengingat Dailo',
+                description: 'Notifikasi pengingat jadwal dan deadline tugas',
+                importance: 5,
+                visibility: 1,
+                vibration: true,
+              });
+            } catch (_) {}
+
+            await LocalNotifications.schedule({
+              notifications: [
+                {
+                  id: Math.floor(Math.random() * 1000000) + 1,
+                  title,
+                  body,
+                  channelId: 'dailo-reminders',
+                  schedule: { at: new Date(Date.now() + 100) },
+                  sound: undefined,
+                  actionTypeId: '',
+                  extra: null,
+                },
+              ],
+            });
+            return;
+          }
+        }
+      } catch (capErr) {
+        console.warn('Capacitor native notification skipped:', capErr);
+      }
+
+      // 4. Web Browser Desktop / Mobile PWA Notification
+      if (typeof window !== 'undefined' && 'Notification' in window) {
+        if (Notification.permission === 'granted' && (preferences?.browser_enabled ?? true)) {
+          try {
+            let swReg: ServiceWorkerRegistration | null = null;
+            if ('serviceWorker' in navigator) {
+              try {
+                swReg = await Promise.race([
+                  navigator.serviceWorker.ready,
+                  new Promise<null>((resolve) => setTimeout(() => resolve(null), 800)),
+                ]);
+              } catch (_) {}
+            }
+
+            if (swReg && typeof swReg.showNotification === 'function') {
+              await swReg.showNotification(title, {
+                body,
+                icon: '/icons/icon-192.png',
+                badge: '/icons/icon-192.png',
+                tag: id || 'dailo-notif',
+              });
+              return;
+            }
+
+            if (typeof Notification === 'function') {
+              new Notification(title, {
+                body,
+                icon: '/icons/icon-192.png',
+              });
+            }
+          } catch (e) {
+            console.warn('Browser notification error:', e);
+          }
         }
       }
     },
-    [preferences?.browser_enabled]
+    [preferences?.browser_enabled, preferences?.sound_enabled, playChime]
   );
 
   // Fetch notifications list
@@ -263,33 +418,57 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
   // Send test notification
   const sendTestNotification = async () => {
-    if (!token) return;
-    try {
-      const res = await fetch(`${apiUrl}/api/notifications/test`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.notification) {
-          setNotifications((prev) => [data.notification, ...prev]);
-          setUnreadCount((c) => c + 1);
-
-          // Play sound if enabled
-          if (preferences?.sound_enabled ?? true) {
-            playChime();
-          }
-
-          // Trigger native notification
-          triggerBrowserNotification(
-            data.notification.title,
-            data.notification.message
-          );
-        }
+    // If browser permission is still default, prompt user (allowed on user click)
+    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+      try {
+        await requestBrowserPermission();
+      } catch (e) {
+        console.warn('Failed to prompt for notification permission:', e);
       }
-    } catch (err) {
-      console.error('Failed to send test notification:', err);
     }
+
+    let createdNotif: NotificationItem | null = null;
+
+    if (token) {
+      try {
+        const res = await fetch(`${apiUrl}/api/notifications/test`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.notification) {
+            createdNotif = data.notification;
+          }
+        }
+      } catch (err) {
+        console.warn('Backend test notification endpoint unreachable, using client fallback:', err);
+      }
+    }
+
+    if (!createdNotif) {
+      createdNotif = {
+        id: 'test-' + Date.now(),
+        user_id: user?.id || 'demo-user',
+        title: '🔔 Uji Coba Notifikasi Dailo',
+        message: 'Pengingat jadwal dan deadline tugas Anda akan tampil seperti ini.',
+        type: 'system',
+        reference_id: null,
+        reference_type: 'system',
+        is_read: false,
+        read_at: null,
+        created_at: new Date().toISOString(),
+      };
+    }
+
+    setNotifications((prev) => [createdNotif!, ...prev]);
+    setUnreadCount((c) => c + 1);
+
+    await triggerNotification(
+      createdNotif.title,
+      createdNotif.message,
+      createdNotif.id
+    );
   };
 
   // Check due reminders (polling)
@@ -304,18 +483,14 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       if (data.due_reminders && data.due_reminders.length > 0) {
         fetchNotifications();
 
-        if (preferences?.sound_enabled ?? true) {
-          playChime();
-        }
-
         for (const due of data.due_reminders) {
-          triggerBrowserNotification(due.title, due.message);
+          await triggerNotification(due.title, due.message, due.id);
         }
       }
     } catch (err) {
       console.warn('Error checking due reminders:', err);
     }
-  }, [token, isAuthenticated, apiUrl, fetchNotifications, preferences?.sound_enabled, playChime, triggerBrowserNotification]);
+  }, [token, isAuthenticated, apiUrl, fetchNotifications, triggerNotification]);
 
   // Initial load
   useEffect(() => {
@@ -368,6 +543,9 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
         isDrawerOpen,
         isSettingsOpen,
         isLoading,
+        activeToast,
+        dismissToast,
+        showInAppToast,
         toggleDrawer,
         toggleSettings,
         fetchNotifications,

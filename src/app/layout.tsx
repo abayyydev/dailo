@@ -5,6 +5,7 @@ import { AuthProvider } from '@/context/AuthContext';
 import { NotificationProvider } from '@/context/NotificationContext';
 import { TrackingProvider } from '@/context/TrackingContext';
 import { FloatingTimerWidget } from '@/components/tracking/FloatingTimerWidget';
+import { GlobalNotificationToast } from '@/components/notifications/GlobalNotificationToast';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { PWAInstallPrompt } from '@/components/common/PWAInstallPrompt';
@@ -66,6 +67,8 @@ export default function RootLayout({
               <main id="main-content">
                 {children}
               </main>
+              {/* Global Floating In-App Notification Toast */}
+              <GlobalNotificationToast />
               {/* Floating Active Timer Widget */}
               <FloatingTimerWidget />
               {/* Global Auth Modal */}
