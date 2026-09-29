@@ -1,0 +1,73 @@
+name: Build Android APK (Capacitor)
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    name: Build Android Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js (Node 22)
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      # 3. Setup Java 21
+      - name: Setup Java 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      # 4. Setup Gradle with automatic cache
+      - name: Setup Gradle Cache
+        uses: gradle/actions/setup-gradle@v4
+
+      # 5. Install Dependencies
+      - name: Install Dependencies
+        run: npm ci
+
+      # 6. Build Next.js Static Export (generates out/)
+      - name: Build Next.js Static Export
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'https://dailo-amber.vercel.app' }}
+
+      # 7. Sync Web Assets with Capacitor Android Platform
+      - name: Sync Capacitor Android
+        run: npx cap sync android
+
+      # 8. Grant Execution Permission for Gradle Wrapper
+      - name: Make Gradle Wrapper Executable
+        run: chmod +x android/gradlew
+
+      # 9. Build Debug APK using Gradle assembleDebug
+      - name: Build Android APK (assembleDebug)
+        run: ./gradlew assembleDebug
+        working-directory: android
+
+      # 10. Upload Built APK as Artifact
+      - name: Upload Debug APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dailo-Debug-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
