@@ -368,18 +368,30 @@ export default function RegisterPage() {
       </div>
 
       {/* Page Footer */}
-      <div className="max-w-6xl w-full mx-auto text-center py-4 text-xs text-slate-400 flex flex-wrap items-center justify-center gap-2">
-        <span>&copy; {new Date().getFullYear()} dailo &bull; your personal flow</span>
-        <span className="hidden sm:inline">&bull;</span>
-        <Link href="/privacy" className="text-slate-500 hover:text-indigo-600 font-medium underline underline-offset-2">
+      <div className="max-w-6xl w-full mx-auto py-4 text-xs text-slate-400 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1.5 leading-normal">
+        <span>&copy; {new Date().getFullYear()} dailo</span>
+        <span className="w-1 h-1 rounded-full bg-slate-300 shrink-0" aria-hidden="true" />
+        <span>your personal flow</span>
+        <span className="w-1 h-1 rounded-full bg-slate-300 shrink-0" aria-hidden="true" />
+        <Link href="/privacy" className="text-slate-500 hover:text-indigo-600 hover:underline transition-colors">
           Kebijakan Privasi
         </Link>
-        <span className="hidden sm:inline">&bull;</span>
-        <Link href="/terms" className="text-slate-500 hover:text-indigo-600 font-medium underline underline-offset-2">
-          Syarat & Ketentuan (T&C)
+        <span className="w-1 h-1 rounded-full bg-slate-300 shrink-0" aria-hidden="true" />
+        <Link href="/terms" className="text-slate-500 hover:text-indigo-600 hover:underline transition-colors">
+          Syarat & Ketentuan
         </Link>
-        <span className="hidden sm:inline">&bull;</span>
-        <span>Dibuat oleh <a href="https://github.com/abayyydev" target="_blank" rel="noopener noreferrer" className="font-semibold text-slate-600 hover:text-indigo-600 hover:underline">abayyydev</a></span>
+        <span className="w-1 h-1 rounded-full bg-slate-300 shrink-0" aria-hidden="true" />
+        <span className="inline-flex items-center gap-1">
+          <span>Dibuat oleh</span>
+          <a
+            href="https://github.com/abayyydev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-slate-600 hover:text-indigo-600 hover:underline transition-colors"
+          >
+            abayyydev
+          </a>
+        </span>
       </div>
     </div>
   );

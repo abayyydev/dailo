@@ -311,21 +311,21 @@ export function MobileNav() {
             </div>
 
             {/* Drawer Footer */}
-            <div className="p-4 border-t border-slate-100 bg-slate-50/70 flex flex-col gap-2.5 text-xs">
+            <div className="p-4 pb-6 border-t border-slate-100 bg-slate-50/70 flex flex-col gap-2.5 text-xs">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-[11px]">
                   <Link
                     href="/privacy"
                     onClick={() => setIsDrawerOpen(false)}
-                    className="text-slate-500 hover:text-indigo-600 font-medium transition-colors"
+                    className="text-slate-600 hover:text-indigo-600 font-medium transition-colors"
                   >
                     Privasi
                   </Link>
-                  <span className="text-slate-300">•</span>
+                  <span className="w-1 h-1 rounded-full bg-slate-300 shrink-0" aria-hidden="true" />
                   <Link
                     href="/terms"
                     onClick={() => setIsDrawerOpen(false)}
-                    className="text-slate-500 hover:text-indigo-600 font-medium transition-colors"
+                    className="text-slate-600 hover:text-indigo-600 font-medium transition-colors"
                   >
                     Ketentuan
                   </Link>
@@ -337,16 +337,16 @@ export function MobileNav() {
                       await logout();
                       router.replace('/login');
                     }}
-                    className="inline-flex items-center gap-1 text-rose-600 hover:text-rose-700 font-semibold cursor-pointer text-[11px]"
+                    className="inline-flex items-center gap-1 text-rose-600 hover:text-rose-700 font-semibold cursor-pointer text-xs"
                   >
                     <LogOut className="w-3.5 h-3.5" />
-                    Keluar
+                    <span>Keluar</span>
                   </button>
                 )}
               </div>
-              <div className="flex items-center justify-between text-slate-400 text-[11px] pt-1.5 border-t border-slate-200/50">
+              <div className="flex items-center justify-between text-slate-400 text-[11px] pt-2 border-t border-slate-200/60">
                 <span>dailo &bull; personal flow</span>
-                <div className="flex items-center gap-1">
+                <span className="inline-flex items-center gap-1 shrink-0">
                   <span>Dibuat oleh</span>
                   <a
                     href="https://github.com/abayyydev"
@@ -356,7 +356,7 @@ export function MobileNav() {
                   >
                     abayyydev
                   </a>
-                </div>
+                </span>
               </div>
             </div>
           </aside>

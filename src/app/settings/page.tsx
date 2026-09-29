@@ -28,6 +28,7 @@ import {
   Shield,
   FileJson,
   FileText,
+  ArrowRight,
 } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -861,25 +862,59 @@ function DataTab({ apiUrl, token, onToast }: { apiUrl: string; token: string; on
           </div>
         )}
 
-        {/* Privacy & Policy Section */}
-        <div className="mt-8 p-5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 flex items-center justify-center shrink-0">
-              <Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+        <hr className="border-slate-100 my-8" />
+
+        {/* Legal & Policy Section */}
+        <div>
+          <p className="text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
+            <Shield className="w-4 h-4 text-slate-400" />
+            Legal & Kebijakan Layanan
+          </p>
+          <p className="text-xs text-slate-400 mb-4">
+            Pelajari komitmen privasi keamanan data Anda dan syarat ketentuan penggunaan dailo.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Privacy Card */}
+            <div className="p-5 rounded-2xl border border-slate-200 bg-white hover:border-indigo-200 hover:shadow-md transition-all group flex flex-col justify-between">
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center mb-4 group-hover:bg-indigo-100 transition-colors">
+                  <Shield className="w-6 h-6 text-indigo-600" />
+                </div>
+                <p className="font-bold text-slate-800 mb-1">Kebijakan Privasi</p>
+                <p className="text-xs text-slate-400 mb-4 leading-relaxed">
+                  Pelajari bagaimana kami mengumpulkan, mengenkripsi, dan melindungi data pribadi Anda tanpa pernah menjualnya ke pihak ketiga.
+                </p>
+              </div>
+              <Link
+                href="/privacy"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 text-sm font-semibold rounded-xl border border-slate-200 hover:border-indigo-200 transition"
+              >
+                <span>Buka Dokumen Privasi</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
-            <div>
-              <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">Kebijakan Privasi & Keamanan Data</h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Pelajari bagaimana dailo menjaga keamanan akun dan privasi data produktivitas Anda.
-              </p>
+
+            {/* Terms Card */}
+            <div className="p-5 rounded-2xl border border-slate-200 bg-white hover:border-indigo-200 hover:shadow-md transition-all group flex flex-col justify-between">
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mb-4 group-hover:bg-slate-200/80 transition-colors">
+                  <FileText className="w-6 h-6 text-slate-700" />
+                </div>
+                <p className="font-bold text-slate-800 mb-1">Syarat & Ketentuan (T&C)</p>
+                <p className="text-xs text-slate-400 mb-4 leading-relaxed">
+                  Ketahui hak, tanggung jawab akun, integritas penggunaan wajar (fair use), dan batasan layanan aplikasi dailo.
+                </p>
+              </div>
+              <Link
+                href="/terms"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-50 hover:bg-slate-100 hover:text-indigo-600 text-slate-700 text-sm font-semibold rounded-xl border border-slate-200 hover:border-indigo-200 transition"
+              >
+                <span>Buka Dokumen T&C</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
-          <Link
-            href="/privacy"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-indigo-300 hover:text-indigo-600 shadow-2xs transition-all shrink-0 cursor-pointer"
-          >
-            <span>Buka Dokumen Privasi</span>
-          </Link>
         </div>
       </div>
     </div>
@@ -958,14 +993,22 @@ export default function SettingsPage() {
                     />
                   ))}
 
-                  <div className="hidden md:block my-2 border-t border-slate-100 dark:border-slate-800" />
+                  <div className="hidden md:block my-2 border-t border-slate-100" />
 
                   <Link
                     href="/privacy"
-                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:text-indigo-600 hover:bg-slate-50 transition-colors"
                   >
                     <Shield className="w-4 h-4 text-slate-400" />
                     <span>Kebijakan Privasi</span>
+                  </Link>
+
+                  <Link
+                    href="/terms"
+                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:text-indigo-600 hover:bg-slate-50 transition-colors"
+                  >
+                    <FileText className="w-4 h-4 text-slate-400" />
+                    <span>Syarat & Ketentuan</span>
                   </Link>
                 </nav>
               </aside>
