@@ -311,7 +311,7 @@ export function MobileNav() {
             </div>
 
             {/* Drawer Footer */}
-            <div className="p-4 pb-6 border-t border-slate-100 bg-slate-50/70 flex flex-col gap-2.5 text-xs">
+            <div className="p-4 pb-8 border-t border-slate-100 bg-slate-50/70 flex flex-col gap-2.5 text-xs">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-[11px]">
                   <Link
