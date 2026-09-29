@@ -17,11 +17,67 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
+const BASE_URL = 'https://dailo-amber.vercel.app';
+
 export const metadata: Metadata = {
-  title: 'dailo — your personal flow',
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: 'dailo — your personal flow',
+    template: '%s — dailo',
+  },
   description:
-    'Timeline schedule, task management, habit & goal tracking, and productivity statistics in one unified platform.',
+    'Timeline schedule, task management, habit & goal tracking, and productivity statistics in one unified platform. Organize your day, build better habits, and reach your goals.',
+  keywords: [
+    'productivity app',
+    'task manager',
+    'habit tracker',
+    'time tracker',
+    'schedule planner',
+    'goal tracking',
+    'daily planner',
+    'dailo',
+    'personal productivity',
+  ],
+  authors: [{ name: 'abayyydev', url: 'https://github.com/abayyydev' }],
+  creator: 'abayyydev',
+  publisher: 'dailo',
   manifest: '/manifest.json',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'id_ID',
+    url: BASE_URL,
+    siteName: 'dailo',
+    title: 'dailo — your personal flow',
+    description:
+      'Satukan tugas, jadwal harian, pelacakan waktu, pembentukan kebiasaan, dan ruang fokus dalam satu platform produktivitas yang intuitif.',
+    images: [
+      {
+        url: '/icons/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'dailo — your personal flow',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@dailo_app',
+    creator: '@abayyydev',
+    title: 'dailo — your personal flow',
+    description:
+      'Satukan tugas, jadwal harian, pelacakan waktu, kebiasaan, dan ruang fokus dalam satu platform.',
+    images: ['/icons/og-image.png'],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -30,6 +86,7 @@ export const metadata: Metadata = {
   icons: {
     icon: '/icons/icon-192.png',
     apple: '/icons/apple-touch-icon.png',
+    shortcut: '/icons/icon-192.png',
   },
   other: {
     'mobile-web-app-capable': 'yes',

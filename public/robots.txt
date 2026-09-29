@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /register
+Allow: /forgot-password
+Allow: /privacy
+Allow: /terms
+
+# Disallow private/authenticated pages
+Disallow: /settings
+Disallow: /tasks
+Disallow: /schedule
+Disallow: /calendar
+Disallow: /habits
+Disallow: /goals
+Disallow: /tracking
+Disallow: /statistics
+Disallow: /notes
+Disallow: /focus
+Disallow: /reset-password
+
+# Sitemap
+Sitemap: https://dailo-amber.vercel.app/sitemap.xml
