@@ -313,14 +313,23 @@ export function MobileNav() {
             {/* Drawer Footer */}
             <div className="p-4 border-t border-slate-100 bg-slate-50/70 flex flex-col gap-2.5 text-xs">
               <div className="flex items-center justify-between">
-                <Link
-                  href="/privacy"
-                  onClick={() => setIsDrawerOpen(false)}
-                  className="inline-flex items-center gap-1.5 text-slate-500 hover:text-indigo-600 font-medium text-[11px] transition-colors"
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Kebijakan Privasi</span>
-                </Link>
+                <div className="flex items-center gap-2 text-[11px]">
+                  <Link
+                    href="/privacy"
+                    onClick={() => setIsDrawerOpen(false)}
+                    className="text-slate-500 hover:text-indigo-600 font-medium transition-colors"
+                  >
+                    Privasi
+                  </Link>
+                  <span className="text-slate-300">•</span>
+                  <Link
+                    href="/terms"
+                    onClick={() => setIsDrawerOpen(false)}
+                    className="text-slate-500 hover:text-indigo-600 font-medium transition-colors"
+                  >
+                    Ketentuan
+                  </Link>
+                </div>
                 {isAuthenticated && (
                   <button
                     onClick={async () => {

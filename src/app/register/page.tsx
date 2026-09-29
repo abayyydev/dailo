@@ -30,6 +30,7 @@ export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [demoLoading, setDemoLoading] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   // If already authenticated, redirect to dashboard
   useEffect(() => {
@@ -41,6 +42,11 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (!agreedToTerms) {
+      setError('Anda harus mencentang dan menyetujui Syarat & Ketentuan (Terms of Service) sebelum mendaftar.');
+      return;
+    }
 
     if (password.length < 6) {
       setError('Password minimal harus 6 karakter.');
@@ -284,11 +290,52 @@ export default function RegisterPage() {
                 </div>
               </div>
 
+              {/* Terms of Service Checkbox */}
+              <div className="pt-1">
+                <label className="flex items-start gap-2.5 cursor-pointer group select-none">
+                  <input
+                    type="checkbox"
+                    id="checkbox-terms"
+                    checked={agreedToTerms}
+                    onChange={(e) => {
+                      setAgreedToTerms(e.target.checked);
+                      if (e.target.checked && error?.includes('Syarat & Ketentuan')) {
+                        setError(null);
+                      }
+                    }}
+                    className="mt-0.5 w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer accent-indigo-600 shrink-0"
+                  />
+                  <span className="text-xs text-slate-600 leading-snug">
+                    Saya telah membaca dan menyetujui{' '}
+                    <Link
+                      href="/terms"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-indigo-600 hover:text-indigo-700 underline underline-offset-2"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Syarat & Ketentuan (T&C)
+                    </Link>{' '}
+                    serta{' '}
+                    <Link
+                      href="/privacy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-indigo-600 hover:text-indigo-700 underline underline-offset-2"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Kebijakan Privasi
+                    </Link>{' '}
+                    dailo.
+                  </span>
+                </label>
+              </div>
+
               <button
                 type="submit"
                 id="btn-register-submit"
-                disabled={submitting || demoLoading}
-                className="w-full mt-2 py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98 disabled:opacity-50"
+                disabled={submitting || demoLoading || !agreedToTerms}
+                className="w-full mt-3 py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submitting ? (
                   <>
@@ -302,14 +349,6 @@ export default function RegisterPage() {
                   </>
                 )}
               </button>
-
-              <p className="mt-3 text-[11px] text-slate-400 text-center leading-relaxed">
-                Dengan mendaftar, Anda menyetujui{' '}
-                <Link href="/privacy" className="text-indigo-600 hover:text-indigo-700 underline font-medium">
-                  Kebijakan Privasi
-                </Link>{' '}
-                dailo.
-              </p>
             </form>
 
             {/* Footer switcher */}
@@ -334,6 +373,10 @@ export default function RegisterPage() {
         <span className="hidden sm:inline">&bull;</span>
         <Link href="/privacy" className="text-slate-500 hover:text-indigo-600 font-medium underline underline-offset-2">
           Kebijakan Privasi
+        </Link>
+        <span className="hidden sm:inline">&bull;</span>
+        <Link href="/terms" className="text-slate-500 hover:text-indigo-600 font-medium underline underline-offset-2">
+          Syarat & Ketentuan (T&C)
         </Link>
         <span className="hidden sm:inline">&bull;</span>
         <span>Dibuat oleh <a href="https://github.com/abayyydev" target="_blank" rel="noopener noreferrer" className="font-semibold text-slate-600 hover:text-indigo-600 hover:underline">abayyydev</a></span>

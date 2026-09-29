@@ -6,37 +6,43 @@ import { Shield } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xs px-6 py-4 hidden md:flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
+    <footer className="mt-auto border-t border-slate-200/80 bg-white/70 backdrop-blur-xs px-6 py-4 hidden md:flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
       {/* App Status & Info (Moved from Sidebar) */}
       <div className="flex items-center gap-2.5">
         <span className="relative flex h-2 w-2">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
         </span>
-        <span className="font-semibold text-slate-800 dark:text-slate-200">dailo</span>
-        <span className="text-slate-300 dark:text-slate-700">•</span>
-        <span className="text-slate-500 dark:text-slate-400">your personal flow</span>
-        <span className="hidden md:inline text-slate-300 dark:text-slate-700">•</span>
-        <span className="hidden md:inline text-slate-400 dark:text-slate-500 font-mono text-[11px]">v1.0 Production Ready</span>
+        <span className="font-semibold text-slate-800">dailo</span>
+        <span className="text-slate-300">•</span>
+        <span className="text-slate-500">your personal flow</span>
+        <span className="hidden md:inline text-slate-300">•</span>
+        <span className="hidden md:inline text-slate-400 font-mono text-[11px]">v1.0 Production Ready</span>
       </div>
 
       {/* Links & Creator Credits */}
       <div className="flex items-center gap-3">
         <Link
           href="/privacy"
-          className="inline-flex items-center gap-1.5 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
+          className="text-slate-500 hover:text-indigo-600 transition-colors"
         >
-          <Shield className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
-          <span>Kebijakan Privasi</span>
+          Privasi
         </Link>
-        <span className="text-slate-300 dark:text-slate-700">•</span>
+        <span className="text-slate-300">•</span>
+        <Link
+          href="/terms"
+          className="text-slate-500 hover:text-indigo-600 transition-colors"
+        >
+          Ketentuan
+        </Link>
+        <span className="text-slate-300">•</span>
         <div className="flex items-center gap-1.5">
           <span>Dibuat oleh</span>
           <a
             href="https://github.com/abayyydev"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:underline transition-colors"
+            className="inline-flex items-center gap-1.5 font-semibold text-indigo-600 hover:text-indigo-700 hover:underline transition-colors"
           >
             <span>abayyydev</span>
             <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" aria-hidden="true">

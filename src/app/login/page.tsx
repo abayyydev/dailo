@@ -323,6 +323,10 @@ export default function LoginPage() {
           Kebijakan Privasi
         </Link>
         <span className="hidden sm:inline">&bull;</span>
+        <Link href="/terms" className="text-slate-500 hover:text-indigo-600 font-medium underline underline-offset-2">
+          Syarat & Ketentuan
+        </Link>
+        <span className="hidden sm:inline">&bull;</span>
         <span>Dibuat oleh <a href="https://github.com/abayyydev" target="_blank" rel="noopener noreferrer" className="font-semibold text-slate-600 hover:text-indigo-600 hover:underline">abayyydev</a></span>
       </div>
     </div>
