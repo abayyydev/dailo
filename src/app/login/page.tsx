@@ -316,8 +316,14 @@ export default function LoginPage() {
       </div>
 
       {/* Page Footer */}
-      <div className="max-w-6xl w-full mx-auto text-center py-4 text-xs text-slate-400">
-        <p>&copy; {new Date().getFullYear()} dailo &bull; your personal flow. Dibuat oleh <a href="https://github.com/abayyydev" target="_blank" rel="noopener noreferrer" className="font-semibold text-slate-600 hover:text-indigo-600 hover:underline">abayyydev</a></p>
+      <div className="max-w-6xl w-full mx-auto text-center py-4 text-xs text-slate-400 flex flex-wrap items-center justify-center gap-2">
+        <span>&copy; {new Date().getFullYear()} dailo &bull; your personal flow</span>
+        <span className="hidden sm:inline">&bull;</span>
+        <Link href="/privacy" className="text-slate-500 hover:text-indigo-600 font-medium underline underline-offset-2">
+          Kebijakan Privasi
+        </Link>
+        <span className="hidden sm:inline">&bull;</span>
+        <span>Dibuat oleh <a href="https://github.com/abayyydev" target="_blank" rel="noopener noreferrer" className="font-semibold text-slate-600 hover:text-indigo-600 hover:underline">abayyydev</a></span>
       </div>
     </div>
   );

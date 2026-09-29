@@ -311,31 +311,44 @@ export function MobileNav() {
             </div>
 
             {/* Drawer Footer */}
-            <div className="p-4 border-t border-slate-100 bg-slate-50/70 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
-                <span>Dibuat oleh</span>
-                <a
-                  href="https://github.com/abayyydev"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold text-indigo-600 hover:text-indigo-700 hover:underline"
+            <div className="p-4 border-t border-slate-100 bg-slate-50/70 flex flex-col gap-2.5 text-xs">
+              <div className="flex items-center justify-between">
+                <Link
+                  href="/privacy"
+                  onClick={() => setIsDrawerOpen(false)}
+                  className="inline-flex items-center gap-1.5 text-slate-500 hover:text-indigo-600 font-medium text-[11px] transition-colors"
                 >
-                  abayyydev
-                </a>
+                  <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Kebijakan Privasi</span>
+                </Link>
+                {isAuthenticated && (
+                  <button
+                    onClick={async () => {
+                      setIsDrawerOpen(false);
+                      await logout();
+                      router.replace('/login');
+                    }}
+                    className="inline-flex items-center gap-1 text-rose-600 hover:text-rose-700 font-semibold cursor-pointer text-[11px]"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    Keluar
+                  </button>
+                )}
               </div>
-              {isAuthenticated && (
-                <button
-                  onClick={async () => {
-                    setIsDrawerOpen(false);
-                    await logout();
-                    router.replace('/login');
-                  }}
-                  className="inline-flex items-center gap-1.5 text-rose-600 hover:text-rose-700 font-semibold cursor-pointer"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  Keluar
-                </button>
-              )}
+              <div className="flex items-center justify-between text-slate-400 text-[11px] pt-1.5 border-t border-slate-200/50">
+                <span>dailo &bull; personal flow</span>
+                <div className="flex items-center gap-1">
+                  <span>Dibuat oleh</span>
+                  <a
+                    href="https://github.com/abayyydev"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-indigo-600 hover:text-indigo-700 hover:underline"
+                  >
+                    abayyydev
+                  </a>
+                </div>
+              </div>
             </div>
           </aside>
         </div>

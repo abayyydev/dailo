@@ -860,6 +860,27 @@ function DataTab({ apiUrl, token, onToast }: { apiUrl: string; token: string; on
             )}
           </div>
         )}
+
+        {/* Privacy & Policy Section */}
+        <div className="mt-8 p-5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 flex items-center justify-center shrink-0">
+              <Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">Kebijakan Privasi & Keamanan Data</h4>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Pelajari bagaimana dailo menjaga keamanan akun dan privasi data produktivitas Anda.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/privacy"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-indigo-300 hover:text-indigo-600 shadow-2xs transition-all shrink-0 cursor-pointer"
+          >
+            <span>Buka Dokumen Privasi</span>
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -936,6 +957,16 @@ export default function SettingsPage() {
                       onClick={() => setActiveTab(tab.id)}
                     />
                   ))}
+
+                  <div className="hidden md:block my-2 border-t border-slate-100 dark:border-slate-800" />
+
+                  <Link
+                    href="/privacy"
+                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                  >
+                    <Shield className="w-4 h-4 text-slate-400" />
+                    <span>Kebijakan Privasi</span>
+                  </Link>
                 </nav>
               </aside>
 

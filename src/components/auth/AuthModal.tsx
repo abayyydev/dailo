@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { X, Mail, Lock, User as UserIcon, LogIn, UserPlus, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
 
@@ -208,6 +209,15 @@ export function AuthModal() {
             <p className="text-[11px] text-center text-slate-400 mt-2">
               Password default demo: <span className="font-mono text-slate-600">Password123!</span>
             </p>
+            <div className="mt-3 pt-2.5 border-t border-slate-100 text-center">
+              <Link
+                href="/privacy"
+                onClick={closeAuthModal}
+                className="text-[11px] text-slate-400 hover:text-indigo-600 underline underline-offset-2 transition-colors"
+              >
+                Kebijakan Privasi dailo
+              </Link>
+            </div>
           </div>
         </div>
       </div>
