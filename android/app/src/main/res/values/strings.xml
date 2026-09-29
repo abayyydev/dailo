@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Dailo</string>
+    <string name="title_activity_main">Dailo</string>
+    <string name="package_name">com.dailo</string>
+    <string name="custom_url_scheme">com.dailo</string>
+</resources>
