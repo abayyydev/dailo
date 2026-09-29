@@ -9,6 +9,7 @@ import { GlobalNotificationToast } from '@/components/notifications/GlobalNotifi
 import { AuthModal } from '@/components/auth/AuthModal';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { PWAInstallPrompt } from '@/components/common/PWAInstallPrompt';
+import { ThemeProvider } from '@/components/common/ThemeProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -62,6 +63,7 @@ export default function RootLayout({
         </a>
 
         <AuthProvider>
+          <ThemeProvider />
           <NotificationProvider>
             <TrackingProvider>
               <main id="main-content">

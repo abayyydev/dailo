@@ -596,50 +596,65 @@ export default function TimeTrackingPage() {
                 </p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead>
-                    <tr className="border-b border-slate-100 text-slate-400 text-[11px]">
-                      <th className="pb-2 font-medium">Aktivitas</th>
-                      <th className="pb-2 font-medium">Kategori</th>
-                      <th className="pb-2 font-medium">Tanggal & Waktu</th>
-                      <th className="pb-2 font-medium">Metode</th>
-                      <th className="pb-2 font-medium">Durasi</th>
-                      <th className="pb-2 text-right font-medium">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {timeLogs.map((log) => (
-                      <tr key={log.id} className="hover:bg-slate-50/50 group">
-                        <td className="py-3 font-bold text-slate-800 max-w-[200px] truncate">
-                          {log.title}
+              <>
+                {/* ── Mobile Card Layout (< md) ── */}
+                <div className="md:hidden space-y-3">
+                  {timeLogs.map((log) => (
+                    <div
+                      key={log.id}
+                      className="p-4 rounded-2xl border border-slate-200 bg-slate-50/60 space-y-2.5"
+                    >
+                      {/* Row 1: title + delete */}
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="text-sm font-bold text-slate-900 leading-tight truncate">
+                            {log.title}
+                          </p>
                           {log.notes && (
-                            <span className="block text-[10px] text-slate-400 font-normal truncate">
+                            <p className="text-[11px] text-slate-400 truncate mt-0.5">
                               {log.notes}
-                            </span>
+                            </p>
                           )}
-                        </td>
+                        </div>
+                        <button
+                          onClick={() => handleDeleteLog(log.id)}
+                          title="Hapus sesi ini"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors shrink-0 cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
 
-                        <td className="py-3">
-                          {log.category_name ? (
-                            <span
-                              className="px-2 py-0.5 rounded text-[10px] font-semibold border"
-                              style={{
-                                backgroundColor: `${log.category_color}15`,
-                                borderColor: `${log.category_color}30`,
-                                color: log.category_color || '#4F46E5',
-                              }}
-                            >
-                              {log.category_name}
-                            </span>
-                          ) : (
-                            <span className="text-slate-400">-</span>
-                          )}
-                        </td>
+                      {/* Row 2: badges */}
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {log.category_name ? (
+                          <span
+                            className="px-2 py-0.5 rounded text-[10px] font-semibold border"
+                            style={{
+                              backgroundColor: `${log.category_color}15`,
+                              borderColor: `${log.category_color}30`,
+                              color: log.category_color || '#4F46E5',
+                            }}
+                          >
+                            {log.category_name}
+                          </span>
+                        ) : null}
+                        {log.is_manual ? (
+                          <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-medium border border-slate-200">
+                            Manual
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 text-[10px] font-medium border border-indigo-100">
+                            Stopwatch
+                          </span>
+                        )}
+                      </div>
 
-                        <td className="py-3 text-slate-600 text-[11px]">
-                          <div>{log.log_date}</div>
-                          <div className="text-slate-400 text-[10px]">
+                      {/* Row 3: date/time + duration */}
+                      <div className="flex items-center justify-between text-[11px]">
+                        <div className="text-slate-500">
+                          <span>{log.log_date}</span>
+                          <span className="text-slate-400 ml-1">
                             {new Date(log.start_time).toLocaleTimeString('id-ID', {
                               hour: '2-digit',
                               minute: '2-digit',
@@ -649,39 +664,104 @@ export default function TimeTrackingPage() {
                               hour: '2-digit',
                               minute: '2-digit',
                             })}
-                          </div>
-                        </td>
-
-                        <td className="py-3">
-                          {log.is_manual ? (
-                            <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-medium border border-slate-200">
-                              Manual
-                            </span>
-                          ) : (
-                            <span className="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 text-[10px] font-medium border border-indigo-100">
-                              Stopwatch
-                            </span>
-                          )}
-                        </td>
-
-                        <td className="py-3 font-mono font-bold text-slate-900">
+                          </span>
+                        </div>
+                        <span className="font-mono font-bold text-slate-900">
                           {formatDurationReadable(log.duration_seconds)}
-                        </td>
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
-                        <td className="py-3 text-right">
-                          <button
-                            onClick={() => handleDeleteLog(log.id)}
-                            title="Hapus sesi ini"
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </td>
+                {/* ── Desktop Table Layout (≥ md) ── */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead>
+                      <tr className="border-b border-slate-100 text-slate-400 text-[11px]">
+                        <th className="pb-2 font-medium">Aktivitas</th>
+                        <th className="pb-2 font-medium">Kategori</th>
+                        <th className="pb-2 font-medium">Tanggal &amp; Waktu</th>
+                        <th className="pb-2 font-medium">Metode</th>
+                        <th className="pb-2 font-medium">Durasi</th>
+                        <th className="pb-2 text-right font-medium">Aksi</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {timeLogs.map((log) => (
+                        <tr key={log.id} className="hover:bg-slate-50/50 group">
+                          <td className="py-3 font-bold text-slate-800 max-w-[200px] truncate">
+                            {log.title}
+                            {log.notes && (
+                              <span className="block text-[10px] text-slate-400 font-normal truncate">
+                                {log.notes}
+                              </span>
+                            )}
+                          </td>
+
+                          <td className="py-3">
+                            {log.category_name ? (
+                              <span
+                                className="px-2 py-0.5 rounded text-[10px] font-semibold border"
+                                style={{
+                                  backgroundColor: `${log.category_color}15`,
+                                  borderColor: `${log.category_color}30`,
+                                  color: log.category_color || '#4F46E5',
+                                }}
+                              >
+                                {log.category_name}
+                              </span>
+                            ) : (
+                              <span className="text-slate-400">-</span>
+                            )}
+                          </td>
+
+                          <td className="py-3 text-slate-600 text-[11px]">
+                            <div>{log.log_date}</div>
+                            <div className="text-slate-400 text-[10px]">
+                              {new Date(log.start_time).toLocaleTimeString('id-ID', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}{' '}
+                              –{' '}
+                              {new Date(log.end_time).toLocaleTimeString('id-ID', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </div>
+                          </td>
+
+                          <td className="py-3">
+                            {log.is_manual ? (
+                              <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-medium border border-slate-200">
+                                Manual
+                              </span>
+                            ) : (
+                              <span className="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 text-[10px] font-medium border border-indigo-100">
+                                Stopwatch
+                              </span>
+                            )}
+                          </td>
+
+                          <td className="py-3 font-mono font-bold text-slate-900">
+                            {formatDurationReadable(log.duration_seconds)}
+                          </td>
+
+                          <td className="py-3 text-right">
+                            <button
+                              onClick={() => handleDeleteLog(log.id)}
+                              title="Hapus sesi ini"
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
             )}
           </div>
         </main>

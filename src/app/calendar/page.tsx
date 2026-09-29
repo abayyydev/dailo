@@ -550,8 +550,25 @@ export default function CalendarPage() {
               </div>
 
               {/* Day Quick Drawer (Selected Date Agenda) */}
+              {/* Mobile: fixed overlay + backdrop. Desktop: inline sidebar. */}
               {selectedDayString && (
-                <div className="w-80 bg-white rounded-3xl border border-slate-200 p-5 shadow-xs shrink-0 space-y-4 animate-in slide-in-from-right-4">
+                <>
+                  {/* Mobile backdrop */}
+                  <div
+                    className="fixed inset-0 bg-black/40 z-40 md:hidden"
+                    onClick={() => setSelectedDayString(null)}
+                  />
+                  {/* Drawer panel */}
+                  <div className={`
+                    fixed bottom-0 left-0 right-0 z-50 rounded-t-3xl
+                    md:relative md:bottom-auto md:left-auto md:right-auto md:z-auto md:rounded-3xl
+                    w-full md:w-80
+                    bg-white border border-slate-200 p-5 shadow-xs
+                    space-y-4 animate-in
+                    slide-in-from-bottom md:slide-in-from-right-4
+                    max-h-[85vh] md:max-h-none overflow-y-auto md:overflow-visible
+                    md:shrink-0
+                  `}>
                   <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                     <div>
                       <span className="text-[11px] font-semibold uppercase tracking-wider text-indigo-600">
@@ -671,7 +688,8 @@ export default function CalendarPage() {
                       )}
                     </div>
                   </div>
-                </div>
+                  </div>
+                </>
               )}
             </div>
           )}
