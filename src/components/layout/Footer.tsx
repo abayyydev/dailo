@@ -4,7 +4,7 @@ import React from 'react';
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-slate-200/80 bg-white/70 backdrop-blur-xs px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+    <footer className="mt-auto border-t border-slate-200/80 bg-white/70 backdrop-blur-xs px-6 py-4 hidden md:flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
       {/* App Status & Info (Moved from Sidebar) */}
       <div className="flex items-center gap-2.5">
         <span className="relative flex h-2 w-2">

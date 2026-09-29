@@ -232,10 +232,10 @@ export default function CalendarPage() {
     <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-16 md:pb-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-24 md:pb-0">
         <Header />
 
-        <main className="p-6 max-w-6xl w-full mx-auto space-y-5">
+        <main className="p-3.5 sm:p-6 max-w-6xl w-full mx-auto space-y-5">
           {/* Header Bar */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
             {/* Period Title & Navigator */}

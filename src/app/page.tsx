@@ -251,12 +251,12 @@ export default function HomePage() {
       <Sidebar />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-16 md:pb-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-24 md:pb-0">
         <Header />
 
-        <main className="p-6 md:p-8 max-w-7xl w-full mx-auto space-y-8">
+        <main className="p-3.5 sm:p-6 md:p-8 max-w-7xl w-full mx-auto space-y-6 sm:space-y-8">
           {/* Executive Welcome Banner */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white p-7 md:p-8 shadow-lg">
+          <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white p-5 sm:p-7 md:p-8 shadow-lg">
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                   <div className="space-y-2.5 max-w-2xl">
                     <div className="flex items-center gap-2">

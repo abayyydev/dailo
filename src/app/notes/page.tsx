@@ -211,12 +211,12 @@ export default function NotesPage() {
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
       <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-16 md:pb-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-24 md:pb-0">
         <Header />
 
-        <main className="p-8 max-w-7xl mx-auto w-full space-y-8">
+        <main className="p-3.5 sm:p-6 md:p-8 max-w-7xl mx-auto w-full space-y-6 sm:space-y-8">
           {/* Top Page Header */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-sm">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-400 flex items-center justify-center text-white shadow-md shadow-amber-100">
                 <StickyNote className="w-5 h-5" />

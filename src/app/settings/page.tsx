@@ -909,19 +909,19 @@ export default function SettingsPage() {
     <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-16 md:pb-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-24 md:pb-0">
         <Header />
 
         <div className="flex-1 bg-slate-50">
           {/* Page Header */}
-          <div className="bg-white border-b border-slate-100 px-6 sm:px-8 py-5">
+          <div className="bg-white border-b border-slate-100 px-4 sm:px-8 py-4 sm:py-5">
             <div className="max-w-4xl mx-auto">
               <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Settings</h1>
               <p className="text-slate-400 text-sm mt-0.5">Manage your account, appearance, and data</p>
             </div>
           </div>
 
-          <div className="max-w-4xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
+          <div className="max-w-4xl mx-auto px-3 sm:px-8 py-4 sm:py-8">
             <div className="flex flex-col md:flex-row gap-6 md:gap-8">
               {/* Sidebar Nav */}
               <aside className="w-full md:w-52 shrink-0">

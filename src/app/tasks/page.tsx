@@ -268,10 +268,10 @@ export default function TasksPage() {
     <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-16 md:pb-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-24 md:pb-0">
         <Header />
 
-        <main className="p-8 max-w-6xl w-full mx-auto space-y-6">
+        <main className="p-3.5 sm:p-6 md:p-8 max-w-6xl w-full mx-auto space-y-5 sm:space-y-6">
           {/* Header section with Stats */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -343,7 +343,7 @@ export default function TasksPage() {
                   <select
                     value={quickCategory}
                     onChange={(e) => setQuickCategory(e.target.value)}
-                    className="px-2.5 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-700 focus:outline-hidden"
+                    className="flex-1 sm:flex-initial px-2.5 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-700 focus:outline-hidden"
                   >
                     <option value="">Kategori...</option>
                     {categories.map((c) => (
@@ -356,7 +356,7 @@ export default function TasksPage() {
                   <select
                     value={quickPriority}
                     onChange={(e: any) => setQuickPriority(e.target.value)}
-                    className="px-2.5 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-700 focus:outline-hidden capitalize"
+                    className="flex-1 sm:flex-initial px-2.5 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-700 focus:outline-hidden capitalize"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -382,8 +382,8 @@ export default function TasksPage() {
               </form>
 
               {/* Status Tabs Bar */}
-              <div className="flex items-center justify-between border-b border-slate-200 pb-3 gap-4 flex-wrap">
-                <div className="flex items-center gap-1.5 overflow-x-auto">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-3 gap-3 flex-wrap">
+                <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
                   {[
                     { id: 'all', label: 'All Tasks', count: totalCount },
                     { id: 'today', label: 'Hari Ini' },
@@ -395,7 +395,7 @@ export default function TasksPage() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id as any)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                         activeTab === tab.id
                           ? 'bg-indigo-600 text-white shadow-xs font-semibold'
                           : 'text-slate-600 hover:bg-slate-100'
@@ -416,11 +416,11 @@ export default function TasksPage() {
                 </div>
 
                 {/* Priority & Search */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                   <select
                     value={selectedPriority}
                     onChange={(e) => setSelectedPriority(e.target.value)}
-                    className="px-2.5 py-1.5 text-xs rounded-xl border border-slate-200 bg-white text-slate-700 focus:outline-hidden"
+                    className="flex-1 sm:flex-initial px-2.5 py-1.5 text-xs rounded-xl border border-slate-200 bg-white text-slate-700 focus:outline-hidden"
                   >
                     <option value="all">Semua Prioritas</option>
                     <option value="urgent">Urgent</option>
@@ -429,14 +429,14 @@ export default function TasksPage() {
                     <option value="low">Low</option>
                   </select>
 
-                  <div className="relative">
+                  <div className="relative flex-1 sm:flex-initial">
                     <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Cari task..."
-                      className="pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-900 w-36 sm:w-48"
+                      className="w-full sm:w-48 pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-900"
                     />
                   </div>
                 </div>
