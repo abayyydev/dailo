@@ -247,10 +247,6 @@ function ResetPasswordForm() {
             </Link>
           </div>
         </div>
-
-        <p className="text-center text-xs text-slate-500 mt-5">
-          © {new Date().getFullYear()} dailo. All rights reserved.
-        </p>
       </div>
     </div>
   );

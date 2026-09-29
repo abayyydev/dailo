@@ -92,13 +92,9 @@ export function MobileNav() {
     };
   }, [isDrawerOpen]);
 
-  // Do not render mobile bottom navbar on authentication pages (login & register)
-  if (
-    pathname === '/login' ||
-    pathname === '/register' ||
-    pathname?.startsWith('/login') ||
-    pathname?.startsWith('/register')
-  ) {
+  // Do not render mobile bottom navbar on authentication pages
+  const authRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
+  if (authRoutes.some((route) => pathname === route || pathname?.startsWith(route))) {
     return null;
   }
 
